@@ -41,6 +41,11 @@
 #define SHOWCUR "\033[?25h"
 #define SAVECUR "\033[s"
 #define RESTCUR "\033[u"
+#define ENTER_DEDICATED_BUFFER "\033[?1049h"
+#define EXIT_DEDICATED_BUFFER "\033[?1049l"
+#define GITHUB "github.com/zetaloop/stuman"
+#define GITHUB_LINK_START "\033]8;;https://" GITHUB "\033\\"
+#define GITHUB_LINK_END "\033]8;;\033\\"
 #define Tri "▲"
 #define Revtri "▼"
 #define CO_ID "学号"
@@ -51,7 +56,7 @@
 #define CO_TOTAL "总分"
 #define __ "   "
 #define __x "  "
-#define VERSION "v1.12"
+#define VERSION "v1.13"
 #define MAX_NAMECHAR 100 // 姓名不应超过100字
 #define MAX_NUMCHAR 32
 #define MAX_LNCHAR 200
@@ -846,8 +851,7 @@ void about()
     char x[] =
         BOLD "   成绩管理系统 " VERSION "\n" NO
              "   By zetaloop\n\n[";
-    char y[] =
-        "github.com/zetaloop/stuman";
+    char y[] = GITHUB;
     for (int i = 0; i < sizeof(x); i++)
     {
         printf("%c", x[i]);
@@ -855,7 +859,7 @@ void about()
     }
     for (int i = 0; i < sizeof(y); i++)
     {
-        printf(BLUE UNDL "%c" NO "]" LN_LEFT, y[i]);
+        printf(BLUE UNDL GITHUB_LINK_START "%c" GITHUB_LINK_END NO "]" LN_LEFT, y[i]);
         sleep(i % 2);
     }
     printf(NO "]");
@@ -882,7 +886,7 @@ int main() // 主UI循环
     physc = (int *)malloc(datalen * sizeof(int));
     clang = (int *)malloc(datalen * sizeof(int));
     total = (int *)malloc(datalen * sizeof(int));
-    printf(CLS RST);
+    printf(CLS RST ENTER_DEDICATED_BUFFER);
     int user = 0;
 loop:
     cursor_index_total = 6;
@@ -902,7 +906,7 @@ loop:
             sleep(i % 2);
         }
         sleep(500);
-        printf("\n" NO);
+        printf("\n" NO EXIT_DEDICATED_BUFFER);
         exit(0);
     }
     else if (user == 0) // enter
